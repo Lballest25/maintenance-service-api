@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 
-from app.core.config import settings
-from app.core.database import Base, engine
+from app.api.v1.category_routes import router as category_router
 from app.api.v1.item_routes import router as item_router
 from app.api.v1.order_routes import router as order_router
-from app.api.v1.category_routes import router as category_router
+from app.core.config import settings
+from app.core.database import Base, engine
 
 app = FastAPI(title=settings.APP_NAME)
 

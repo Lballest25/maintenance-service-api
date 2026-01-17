@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 
 from app.models.category import Category
 from app.repositories.category_repository import CategoryRepository
-from app.utils.exceptions import NotFoundException, ConflictException
+from app.utils.exceptions import ConflictException, NotFoundException
 
 
 class CategoryService:

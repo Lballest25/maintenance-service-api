@@ -1,9 +1,9 @@
 from sqlalchemy.orm import Session
 
 from app.models.item import Item
+from app.repositories.category_repository import CategoryRepository
 from app.repositories.item_repository import ItemRepository
 from app.utils.exceptions import BadRequestException, NotFoundException
-from app.repositories.category_repository import CategoryRepository
 
 
 class ItemService:
@@ -24,7 +24,7 @@ class ItemService:
             sku=data.sku,
             price=data.price,
             stock=data.stock,
-            category_id=data.category_id
+            category_id=data.category_id,
         )
 
         return ItemRepository.create(db, item)
