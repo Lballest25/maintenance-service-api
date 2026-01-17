@@ -1,5 +1,5 @@
-from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import Session
 
 from app.models.order import Order
 from app.models.order_item import OrderItem
