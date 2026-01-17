@@ -1,4 +1,3 @@
-from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.models.idempotency import IdempotencyKey
@@ -7,21 +6,27 @@ from app.models.order_item import OrderItem
 from app.repositories.idempotency_repository import IdempotencyRepository
 from app.repositories.item_repository import ItemRepository
 from app.repositories.order_repository import OrderRepository
+from app.utils.exceptions import BadRequestException, NotFoundException
 
 
 class OrderService:
 
     @staticmethod
     def create_order(db: Session, data, request_id: str) -> Order:
-
+        """
+        Create a new order with idempotency handling.
+        :param db: Database
+        :param data: Order data
+        :param request_id: Unique request identifier
+        :return: Created Order object
+        """
         existing_key = IdempotencyRepository.get_by_request_id(db, request_id)
 
         if existing_key is not None:
             order = OrderRepository.get_by_id(db, int(existing_key.order_id))
             if order is None:
-                raise HTTPException(
-                    status_code=status.HTTP_404_NOT_FOUND,
-                    detail=f"Order {existing_key.order_id} not found",
+                raise NotFoundException(
+                    f"Order {existing_key.order_id} not found"
                 )
             return order
 
@@ -35,15 +40,13 @@ class OrderService:
             item = ItemRepository.get_by_id(db, item_data.item_id)
 
             if item is None:
-                raise HTTPException(
-                    status_code=status.HTTP_404_NOT_FOUND,
-                    detail=f"Item {item_data.item_id} not found",
+                raise NotFoundException(
+                    f"Item {item_data.item_id} not found"
                 )
 
             if item.stock < item_data.quantity:
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=f"Insufficient stock for item {item.id}",
+                raise BadRequestException(
+                    f"Insufficient stock for item {item.id}"
                 )
 
             item.stock -= item_data.quantity
