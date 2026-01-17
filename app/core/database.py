@@ -12,11 +12,11 @@ engine = create_engine(
     echo=False,
 )
 
-sessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+SESSION_LOCAL = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 def get_db():
-    db = sessionLocal()
+    db = SESSION_LOCAL()
     try:
         yield db
     except SQLAlchemyError as e:

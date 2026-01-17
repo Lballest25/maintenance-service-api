@@ -10,6 +10,12 @@ class ItemService:
 
     @staticmethod
     def create_item(db: Session, data) -> Item:
+        """
+        Create a new item after validating the input data.
+        :param db: Database session
+        :param data: Data for the new item
+        :return: Created Item object
+        """
         category = CategoryRepository.get_by_id(db, data.category_id)
         if category is None:
             raise NotFoundException("Category not found")
@@ -31,10 +37,22 @@ class ItemService:
 
     @staticmethod
     def list_items(db: Session):
+        """
+        Retrieve all items from the database.
+        :param db: Database session
+        :return: List of Item objects
+        """
         return ItemRepository.get_all(db)
 
     @staticmethod
     def update_item(db: Session, item_id: int, data) -> Item:
+        """
+        Update an existing item with new data.
+        :param db: Database session
+        :param item_id: ID of the item to update
+        :param data: New data for the item
+        :return: Updated Item object
+        """
         item = ItemRepository.get_by_id(db, item_id)
 
         if item is None:
