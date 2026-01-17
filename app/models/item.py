@@ -1,11 +1,11 @@
 from sqlalchemy import (
     Column,
-    Integer,
-    String,
-    Numeric,
-    ForeignKey,
     DateTime,
-    Index
+    ForeignKey,
+    Index,
+    Integer,
+    Numeric,
+    String
 )
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -31,4 +31,5 @@ class Item(Base):
 
     __table_args__ = (
         Index("idx_items_sku", "sku"),
+        Index("idx_items_category_id", "category_id"),
     )

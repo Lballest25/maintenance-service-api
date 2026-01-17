@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_db
-from app.schemas.item import ItemCreate, ItemUpdate, ItemResponse
-from app.services.item_service import ItemService
 from app.core.decorators import measure_time
+from app.schemas.item import ItemCreate, ItemResponse, ItemUpdate
+from app.services.item_service import ItemService
 
 router = APIRouter(prefix="/items", tags=["Items"])
 
@@ -15,28 +15,17 @@ router = APIRouter(prefix="/items", tags=["Items"])
     status_code=status.HTTP_201_CREATED
 )
 @measure_time
-async def create_item(
-    item: ItemCreate,
-    db: Session = Depends(get_db)
-):
+async def create_item(item: ItemCreate, db: Session = Depends(get_db)):
     return ItemService.create_item(db, item)
 
 
-@router.get(
-    "/",
-    response_model=list[ItemResponse]
-)
+@router.get("/", response_model=list[ItemResponse])
 @measure_time
-async def list_items(
-    db: Session = Depends(get_db)
-):
+async def list_items(db: Session = Depends(get_db)):
     return ItemService.list_items(db)
 
 
-@router.patch(
-    "/{item_id}",
-    response_model=ItemResponse
-)
+@router.patch("/{item_id}", response_model=ItemResponse)
 @measure_time
 async def update_item(
     item_id: int,
